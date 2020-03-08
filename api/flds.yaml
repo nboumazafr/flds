@@ -1,0 +1,84 @@
+swagger: '2.0'
+info:
+  description: ForgeRock Log Data Acces API. [Cloud Endpoints + Cloud Run]
+  title: FLDS
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /health:
+    get:
+      description: health check.
+      operationId: health
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: heartbeat endpoint response
+          schema:
+            $ref: '#/definitions/status'
+  /logs:
+    get:
+      description: Returns all log events [TODO Add optional query params]
+      operationId: getLogEvents
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: List of log events.
+          schema:
+            $ref: '#/definitions/logEvent'
+#      x-google-quota:
+#        metricCosts:
+#          read-requests: 1
+      security:
+        - api_key: []
+definitions:
+  logEvent:
+    properties:
+      data:
+        type: string
+    required:
+      - name
+  status:
+    properties:
+      status:
+        type: string
+    required:
+      - name
+
+# This section requires all requests to any path to require an API key.
+securityDefinitions:
+  # This section configures basic authentication with an API key.
+  api_key:     # arbitrary name for the security scheme
+    type: "apiKey"
+    name: "key"
+    in: "query"
+# Apply the security globally to all operations
+security:
+  - api_key: [] # use the same name as above
+
+# Metrics & Rate Quota
+#x-google-management:
+#  metrics:
+#    - name: read-requests
+#      displayName: Read requests
+#      value_type: INT64
+#      metric_kind: DELTA
+#  quota:
+#    limits:
+#      - name: read-limit
+#        metric: read-requests
+#        unit: '1/min/{project}'
+#        values:
+#          STANDARD: 1000
+
+# Cloud Run backend service
+host: gateway-ijzjfv7ydq-ue.a.run.app
+schemes:
+  - https
+#basePath: /
+x-google-backend:
+  address: https://gateway-ijzjfv7ydq-ue.a.run.app
