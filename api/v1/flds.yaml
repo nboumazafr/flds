@@ -79,6 +79,6 @@ security:
 host: gateway-ijzjfv7ydq-ue.a.run.app
 schemes:
   - https
-#basePath: /
+basePath: /    # TODO v1 - use in path or in header?
 x-google-backend:
   address: https://gateway-ijzjfv7ydq-ue.a.run.app

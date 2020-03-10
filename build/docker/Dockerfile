@@ -1,5 +1,3 @@
-# docker build -f tests/endpoints/echo/Dockerfile -t echo .
-# docker run --rm -it -p 7070:7070 flds
 
 FROM golang:1.13-alpine AS build_base
 
@@ -9,12 +7,12 @@ RUN apk add --no-cache git
 WORKDIR /tmp/flds
 
 # We want to populate the module cache based on the go.{mod,sum} files.
-COPY ../../cmd/flds/go.mod .
-COPY ../../cmd/flds/go.sum .
+COPY go.mod .
+COPY go.sum .
 
 RUN go mod download
 
-COPY ../.. .
+COPY . .
 
 # Unit tests
 RUN CGO_ENABLED=0 go test -v
@@ -29,7 +27,7 @@ RUN apk add ca-certificates
 
 COPY --from=build_base /tmp/flds/out/flds /app/flds
 
-# This container exposes port 8080 to the outside world
+# This container exposes port 7070 to the outside world
 EXPOSE 7070
 
 # Run the binary program produced by `go install`

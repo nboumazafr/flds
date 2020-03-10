@@ -41,14 +41,35 @@ func getLogEvents(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	port := os.Getenv("PORT")
+
 	if port == "" {
 		port = "7070"
 	}
+
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/health", health).Methods("GET")
 	router.HandleFunc("/logs", getLogEvents).Methods("GET")
-	log.Fatal(http.ListenAndServe("localhost:"+port, router))
+
+	srv := &http.Server{
+		Handler:      router,
+		Addr:         ":" + port,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	log.Println("Server listening at: ", srv.Addr)
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
+	// Start Server
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// Graceful Shutdown
+	waitForShutdown(srv)
 }
 
 func waitForShutdown(srv *http.Server) {
@@ -61,7 +82,9 @@ func waitForShutdown(srv *http.Server) {
 	// Create a deadline to wait for.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	srv.Shutdown(ctx)
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal(err)
+	}
 	log.Println("Shutting down")
 	os.Exit(0)
 }
