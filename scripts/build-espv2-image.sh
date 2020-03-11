@@ -1,7 +1,7 @@
 #!/bin/bash
-# Following gcloud commands can be used to find out service name
-#   gcloud endpoints configs list --service=${SERVICE}
-# Use the latest one for the CONFIG_ID
+
+# This script will download the service config and build it into
+# serverless docker image to be used for Cloud Run.
 
 # Default to the release image if not specified
 BASE_IMAGE=gcr.io/endpoints-release/endpoints-runtime-serverless:2

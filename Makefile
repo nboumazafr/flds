@@ -16,25 +16,23 @@ check-env:
 	  $(error GOOGLE_PROJECT_ID is undefined, please make sure these match the environment you are planning to run against)
 	endif
 
-# Requires ENV vars to be set for: GOOGLE_PROJECT_ID, CLUSTER_REGION,
-# Suggestion: Make your own .env file to source.
-
-docker-build:
-	docker build -t forgecloud/$(APP_NAME):local -f build/docker/Dockerfile ..
+# Requires ENV vars to be set for: GOOGLE_PROJECT_ID, etc
+# Make your own .env file to source.
 
 docker-run: docker-build
 	docker run --rm -it -p 7070:7070 flds
 
-push:
-	docker tag forgecloud/$(APP_NAME):local gcr.io/$(REGISTRY_PROJECT_ID)/$(APP_NAME):$(IMAGE_TAG)
-	gcloud docker -- push gcr.io/$(REGISTRY_PROJECT_ID)/$(APP_NAME):$(IMAGE_TAG)
+docker-build:
+	docker build -f Dockerfile -t flds .
 
+deploy-flds-endpoint:
+	gcloud endpoints services deploy api/v1/flds.yaml --project flds-269622
+
+cloudrun-deploy-flds:
+	./scripts/deploy-flds-to-cloudrun.sh
 
 go-run: go-install
 	flds
-
-docker-build:
-	docker build -f build/docker/Dockerfile -t flds .
 
 go-install:
 	go install github.com/ForgeCloud/flds
