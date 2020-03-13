@@ -30,9 +30,9 @@ paths:
           description: List of log events.
           schema:
             $ref: '#/definitions/logEvent'
-#      x-google-quota:
-#        metricCosts:
-#          read-requests: 1
+      x-google-quota:
+        metricCosts:
+          read-requests: 1
       security:
         - api_key: []
 definitions:
@@ -61,19 +61,19 @@ security:
   - api_key: [] # use the same name as above
 
 # Metrics & Rate Quota
-#x-google-management:
-#  metrics:
-#    - name: read-requests
-#      displayName: Read requests
-#      value_type: INT64
-#      metric_kind: DELTA
-#  quota:
-#    limits:
-#      - name: read-limit
-#        metric: read-requests
-#        unit: '1/min/{project}'
-#        values:
-#          STANDARD: 1000
+x-google-management:
+  metrics:
+    - name: read-requests
+      displayName: Read requests
+      value_type: INT64
+      metric_kind: DELTA
+  quota:
+    limits:
+      - name: read-limit
+        metric: read-requests
+        unit: '1/min/{project}'
+        values:
+          STANDARD: 1000
 
 # Cloud Run backend service
 host: gateway-ijzjfv7ydq-ue.a.run.app
@@ -82,6 +82,6 @@ schemes:
 basePath: /    # TODO v1 - use in path or in header?
 # https://cloud.google.com/endpoints/docs/openapi/openapi-extensions#understanding_path_translation
 x-google-backend:
-  address: https://gateway-ijzjfv7ydq-ue.a.run.app
-  # path_translation: APPEND_PATH_TO_ADDRESS default
-  # deadline: 15.0  default
+  address: https://flds-ijzjfv7ydq-uw.a.run.app
+  path_translation: APPEND_PATH_TO_ADDRESS   #default
+  deadline: 15.0    #default
