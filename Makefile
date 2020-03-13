@@ -25,10 +25,14 @@ docker-run: docker-build
 docker-build:
 	docker build -f Dockerfile -t flds .
 
-deploy-flds-endpoint:
-	gcloud endpoints services deploy api/v1/flds.yaml --project flds-269622
+deploy-flds-yaml:
+	validate-flds-yaml
+	./scripts/deploy-flds-openapi.sh api/v1/flds.yaml flds-269622
 
-cloudrun-deploy-flds:
+validate-flds-yaml:
+	./scripts/validate-flds-openapi.sh api/v1/flds.yaml
+
+deploy-flds-to-clourun:
 	./scripts/deploy-flds-to-cloudrun.sh
 
 go-run: go-install

@@ -74,6 +74,9 @@ Service [gateway] revision [gateway-00001] has been deployed and is serving traf
 ```
 
 ## 4. Deploy Endpoint Service Contract  
+yourOpenApiServiceDef.yaml file defines your configuration settings
+as well as general app, network, and other resource settings. 
+More info [here](https://cloud.google.com/appengine/docs/flexible/nodejs/reference/app-yaml)
 
 *IMPORTANT*
 

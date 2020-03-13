@@ -77,6 +77,7 @@ x-google-management:
 
 # Cloud Run backend service
 host: gateway-ijzjfv7ydq-ue.a.run.app
+
 schemes:
   - https
 basePath: /    # TODO v1 - use in path or in header?
@@ -85,3 +86,18 @@ x-google-backend:
   address: https://flds-ijzjfv7ydq-uw.a.run.app
   path_translation: APPEND_PATH_TO_ADDRESS   #default
   deadline: 15.0    #default
+  # liveness
+  liveness_check:
+    path: "/ping"
+    check_interval_sec: 30
+    timeout_sec: 4
+    failure_threshold: 2
+    success_threshold: 2
+  #scaling
+  automatic_scaling:
+      min_num_instances: 1
+      max_num_instances: 15
+      cool_down_period_sec: 180
+      cpu_utilization:
+        target_utilization: 0.6
+
