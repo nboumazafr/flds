@@ -1,16 +1,19 @@
 # Project Background
+
 WHAT: POC implementation for an API Endpoint (backend service) fronted by ESPV2 beta1 (service proxy)
+
 JIRA#: FRAAS-2350
+
 EPIC#: FRAAS-443
 
-##1. Set your current projectID 
+## 1. Set your current projectID 
 ````
 gcloud config set project <projectID>
 ````    
     
-##2. Build & Deploy Backend Service on CloudRun
+## 2. Build & Deploy Backend Service on CloudRun
 
-###2.1 Build docker image
+### 2.1 Build docker image
 Build your container image using Cloud Build, 
 by running the following command from the directory containing the Dockerfile:
 
@@ -23,7 +26,7 @@ Example:
 ````
 gcloud builds submit --tag gcr.io/flds-269622/flds
 ````
-###2.2 Deploy to CloudRun
+### 2.2 Deploy to CloudRun
 Command: 
 ````
 gcloud run deploy BACKEND_SERVICE_NAME \
@@ -47,7 +50,7 @@ Endpoints uses ESP Beta as an API gateway.
 With this set up, ESP intercepts all requests to your services and performs any necessary checks (such as authentication) before invoking the service. 
 When the service responds, ESP gathers and reports telemetry.
 
-##3. Deploy ESPv2 Beta to Cloud Run
+## 3. Deploy ESPv2 Beta to Cloud Run
 Will be used as a gateway fronting our backend service 
 
 Command:
@@ -70,7 +73,7 @@ You should get a response like:
 Service [gateway] revision [gateway-00001] has been deployed and is serving traffic at https://gateway-ijzjfv7ydq-ue.a.run.app
 ```
 
-##4. Deploy Endpoint Service Contract  
+## 4. Deploy Endpoint Service Contract  
 
 *IMPORTANT*
 
@@ -96,7 +99,7 @@ Example:
   ESP detects the change and automatically begins using it
   More info [here](https://cloud.google.com/endpoints/docs/openapi/deploy-endpoints-config#redeploying)   
 
-##5. Enable your Endpoints service 
+## 5. Enable your Endpoints service 
 Command:
  ````
   gcloud services enable ENDPOINTS_SERVICE_NAME
@@ -113,13 +116,13 @@ Command:
  More info [here](https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#checking_required_services)
  
   
-##5. Build a new ESPV2 image (fronting our service) 
+## 5. Build a new ESPV2 image (fronting our service) 
 If the docker image did not have the service config built into it, Cloud Run would have to 
 make two API calls to Google ServiceManagement at cold start. 
 These calls count against your Google ServiceManagement API quota.
 More info [here](https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run#configure_esp)
 
-###5.1. Build the service config into a new ESPv2 Beta docker image
+### 5.1. Build the service config into a new ESPv2 Beta docker image
 
 The script uses the gcloud command to download the service config, 
 build the service config into a new ESPv2 Beta image, and upload the new image 
@@ -154,7 +157,7 @@ gcloud run deploy gateway \
   --project=flds-269622 \
   --region=us-east1
 ````
-##6. Grant ESPv2 Beta permission to invoke the Cloud Run services
+## 6. Grant ESPv2 Beta permission to invoke the Cloud Run services
 
 Command: 
 ````
